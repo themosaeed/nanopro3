@@ -153,14 +153,14 @@ jobs:
     steps: 
       - checkout
       - install_aws_cli
-      # - run:
-      #     name : Ensure back-end infrastructure exist
-      #     command: |
-      #       aws cloudformation deploy \
-      #         --template-file .circleci/files/backend.yml \
-      #         --tags project=udacitypro3 \
-      #         --stack-name "udacitypro3-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #         --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+      - run:
+          name : Ensure back-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project=udacitypro3 \
+              --stack-name "udacitypro3-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
 
       - run:
           name: Ensure front-end infrastructure exist

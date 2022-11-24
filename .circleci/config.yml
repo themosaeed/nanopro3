@@ -11,28 +11,32 @@ commands:
             unzip awscliv2.zip
             sudo ./aws/install
 
-  install_ancible:
-    description : install_ancible
+  install_ansible:
+    description : install_ansible
     steps: 
       - run:
-          name : install_ancible
+          name : install_ansible
           command: |
             sudo apt-add-repository ppa:ansible/ansible
             sudo apt update
             sudo apt install ansible
   
                       
-#   destroy-environment:
-#     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-#     parameters:
-#       # Add parameter here   
-#     steps:
-#       - run:
-#           name: Destroy environments
-#           when: on_fail
-#           command: |
-#             # Your code here
-#             exit 1
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      Workflow ID :
+        type : string
+        default : ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            echo "Destroying environment: <<parameters.workflow_id>> "
+            aws cloudformation delete-stack --stack-name udacitypro3-backend-<<parameters.workflow_id>>
+            aws s3 rm s3://udacitypro3-<<parameters.workflow_id>> --recursive
+            aws cloudformation delete-stack --stack-name udacitypro3-frontend-<<parameters.workflow_id>>
 
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.
@@ -185,26 +189,40 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-#       # Here's where you will add some code to rollback on failure      
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+      - destroy-environment 
+
+  configure-infrastructure:
+    docker:
+      - image : cimg/base:stable
+    steps:
+      - checkout
+      - install_ansible
+      - add_ssh_keys:
+          fingerprints: ["ac:b9:50:0e:b6:02:9d:fe:c2:83:77:1d:ec:21:f2:b9"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: configure server
+          command: |
+            cd .circleci/ansible
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configue-server.yml
+      - destroy-environment
+            
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+
+      - destroy-environment
+      # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
 #     docker:

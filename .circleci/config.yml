@@ -34,9 +34,9 @@ commands:
           when: on_fail
           command: |
             echo "Destroying environment: <<parameters.workflow_id>> "
-            aws cloudformation delete-stack --stack-name udacitypro3-backend-<<parameters.workflow_id>>
-            aws s3 rm s3://udacitypro3-<<parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack --stack-name udacitypro3-frontend-<<parameters.workflow_id>>
+            sudo aws cloudformation delete-stack --stack-name udacitypro3-backend-<<parameters.workflow_id>>
+            sudo aws s3 rm s3://udacitypro3-<<parameters.workflow_id>> --recursive
+            sudo aws cloudformation delete-stack --stack-name udacitypro3-frontend-<<parameters.workflow_id>>
 
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.

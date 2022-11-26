@@ -250,8 +250,8 @@ jobs:
       - image: cimg/python:3.11.0-node   
     steps:
       - checkout
-      - install-awscli
-      - install-ansible
+      - install_aws_cli
+      - install_ansible
       - install-node
       - restore_cache:
           keys:

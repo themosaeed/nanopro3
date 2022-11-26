@@ -1,9 +1,9 @@
 export NODE_ENV=production
 export VERSION=1
 export TYPEORM_CONNECTION=postgres
-export TYPEORM_HOST=udacity.ctuvj22uwetr.us-east-1.rds.amazonaws.com
+export TYPEORM_HOST=udapeople-db.caounmzo6jzy.us-west-2.rds.amazonaws.com
 export TYPEORM_USERNAME=postgres
-export TYPEORM_PASSWORD=4lnh5wgONek3gek1su2o
+export TYPEORM_PASSWORD=NbBQWRVYUexvuzbiVzUj
 export TYPEORM_DATABASE=glee
 export TYPEORM_PORT=5432
 export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts

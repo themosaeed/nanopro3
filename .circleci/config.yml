@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+   aws-cli: circleci/aws-cli@2.0.3
+
 commands:
   install_aws_cli:
     description : install aws cli
@@ -270,7 +273,6 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-            # Your code here
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl https://kvdb.io/36EjPCDxuQU1Fpy7ij3ReE/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'

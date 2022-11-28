@@ -73,25 +73,6 @@ commands:
             npm install
             npm run-migrations:revert
             fi
-
-#   revert-migrations:
-#     description: Revert the last migration if successfully run in the current workflow.
-#     parameters:
-#       # Add parameter here     
-#     steps:
-#       - run:
-#           name: Revert migrations
-#           # Add when this will run
-#           command: |
-#             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-#             SUCCESS = 1
-#             if(( $SUCCESS==1 )); 
-#             then
-#             #  cd ~/project/backend
-#             #  npm install
-#             #  Add revert code here. You can find this in the Getting Started section.
-#               exit 1
-#             fi
             
 jobs:
   build-frontend:
@@ -250,14 +231,14 @@ jobs:
             
   run-migrations:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/python:3.11.0-node
     steps:
       - checkout
       - install_aws_cli
       - install-node
       - restore_cache:
           keys:
-            - build-backend
+            - backend-deps
       - run:
           name: install tsc
           command: |

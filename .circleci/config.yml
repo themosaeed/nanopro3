@@ -254,6 +254,7 @@ jobs:
     steps:
       - checkout
       - install_aws_cli
+      - install-node
       - restore_cache:
           keys:
             - build-backend
